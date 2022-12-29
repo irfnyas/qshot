@@ -30,7 +30,7 @@ jobs:
           result-encoding: string
           script: return context.sha.substring(0, 7)
       - run: echo 'The Title of your PR is ${{ github.event_name }}'
-      - run: echo 'The Title of your PR is ${{ github.event.pull_request.title }}'
+      - run: echo 'The Title of your PR is ${{ github.event.push.title }}'
       # - run: echo 'The Title of your PR is ${{ github.workflow }}'
 
       # # build
