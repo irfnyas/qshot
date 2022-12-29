@@ -25,10 +25,12 @@ jobs:
           java-version: 11
       - uses: subosito/flutter-action@v2
       - uses: actions/github-script@v6
-        id: commit-id
+        id: SHA
         with:
           result-encoding: string
           script: return context.sha.substring(0, 7)
+      - uses: 8BitJonny/gh-get-current-pr@2.2.0
+        id: PR
 
       # build
       - run: flutter pub get
@@ -45,12 +47,12 @@ jobs:
           curl \
           -F chat_id='${{ env.evidence_telegram_id }}' \
           -F photo='${{ env.evidence_photo_url }}' \
-          -F caption=$'/lapor Research IT Development | QShot: ${{ github.event.pull_request.title }} (${{ steps.commit-id.outputs.result }}) \nPeserta: @${{ github.actor }} \nLampiran: https://github.com/irfnyas/qshot' \
+          -F caption=$'/lapor Research IT Development | QShot: ${{ steps.PR.outputs.pr_title }} (${{ steps.SHA.outputs.result }}) \nPeserta: @${{ github.actor }} \nLampiran: https://github.com/irfnyas/qshot' \
           https://api.telegram.org/bot${{ env.telegram_token }}/sendPhoto
 
       - run: |
           curl \
           -F chat_id='${{ env.evidence_telegram_id }}' \
           -F photo='${{ env.evidence_photo_url }}' \
-          -F caption=$'/lapor Research IT Development | Release APK QShot di Github Artifact (${{ steps.commit-id.outputs.result }}) \nPeserta: @${{ github.actor }} \nLampiran: https://github.com/irfnyas/qshot/releases' \
+          -F caption=$'/lapor Research IT Development | Release APK QShot di Github Artifact (${{ steps.SHA.outputs.result }}) \nPeserta: @${{ github.actor }} \nLampiran: https://github.com/irfnyas/qshot/releases' \
           https://api.telegram.org/bot${{ env.telegram_token }}/sendPhoto
