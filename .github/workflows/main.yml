@@ -45,5 +45,12 @@ jobs:
           curl \
           -F chat_id='${{ env.evidence_telegram_id }}' \
           -F photo='${{ env.evidence_photo_url }}' \
+          -F caption=$'/lapor Research IT Development | Membuat kode program QShot (${{ steps.commit-id.outputs.result }}) \nPeserta: @${{ github.actor }} \nLampiran: https://github.com/irfnyas/qshot' \
+          https://api.telegram.org/bot${{ env.telegram_token }}/sendPhoto
+
+      - run: |
+          curl \
+          -F chat_id='${{ env.evidence_telegram_id }}' \
+          -F photo='${{ env.evidence_photo_url }}' \
           -F caption=$'/lapor Research IT Development | Release APK QShot di Github Artifact (${{ steps.commit-id.outputs.result }}) \nPeserta: @${{ github.actor }} \nLampiran: https://github.com/irfnyas/qshot/releases' \
           https://api.telegram.org/bot${{ env.telegram_token }}/sendPhoto
