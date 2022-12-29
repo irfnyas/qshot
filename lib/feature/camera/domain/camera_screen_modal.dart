@@ -1,0 +1,1 @@
+enum CameraScreenModal { edit, share }

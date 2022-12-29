@@ -1,0 +1,56 @@
+name: FLUTTER-CI
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  # common
+  telegram_token: ${{ secrets.TL_TOKEN }}
+
+  # evidence
+  evidence_telegram_id: ${{ secrets.EVIDENCE_TL_ID }}
+  evidence_photo_url: https://raw.githubusercontent.com/irfnyas/qshot/master/evidence.png
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # init
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+      - uses: subosito/flutter-action@v2
+      - uses: actions/github-script@v6
+        id: commit-id
+        with:
+          result-encoding: string
+          script: return context.sha.substring(0, 7)
+
+      # build
+      - run: flutter pub get
+      - run: flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols
+
+      # deploy on github artifact
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: build/app/outputs/apk/release/app-release.apk
+          tag_name: v1.0.0
+
+      # create evidence
+      - run: |
+          curl \
+          -F chat_id='${{ env.evidence_telegram_id }}' \
+          -F photo='${{ env.evidence_photo_url }}' \
+          -F caption=$'/lapor Research IT Development | QShot: ${{ github.event.pull_request.title }} (${{ steps.commit-id.outputs.result }}) \nPeserta: @${{ github.actor }} \nLampiran: https://github.com/irfnyas/qshot' \
+          https://api.telegram.org/bot${{ env.telegram_token }}/sendPhoto
+
+      - run: |
+          curl \
+          -F chat_id='${{ env.evidence_telegram_id }}' \
+          -F photo='${{ env.evidence_photo_url }}' \
+          -F caption=$'/lapor Research IT Development | Release APK QShot di Github Artifact (${{ steps.commit-id.outputs.result }}) \nPeserta: @${{ github.actor }} \nLampiran: https://github.com/irfnyas/qshot/releases' \
+          https://api.telegram.org/bot${{ env.telegram_token }}/sendPhoto
