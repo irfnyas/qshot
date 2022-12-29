@@ -144,7 +144,7 @@ class CameraController extends GetxController {
     isCamFileShown.value = true;
 
     await doFlashEffect();
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 1000));
 
     await doScreenshot();
     if (screenshotFile.value.isNotEmpty) {
@@ -212,10 +212,10 @@ class CameraController extends GetxController {
       }
 
       final dir = Platform.isAndroid
-          ? Directory('/storage/emulated/0/Download')
+          ? Directory('/storage/emulated/0/QShot')
           : await getApplicationDocumentsDirectory();
       final date = DateFormat('yyyy_MM_dd_HH_mm_ss').format(DateTime.now());
-      final file = await File('${dir.path}/QShot/qshot_$date.png').create(
+      final file = await File('${dir.path}/qshot_$date.png').create(
         recursive: true,
       );
       await file.writeAsBytes(screenshotFile.value);
