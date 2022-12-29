@@ -24,13 +24,15 @@ jobs:
       #     distribution: zulu
       #     java-version: 11
       # - uses: subosito/flutter-action@v2
+      - uses: 8BitJonny/gh-get-current-pr@2.2.0
+        id: PR
       - uses: actions/github-script@v6
         id: commit-id
         with:
           result-encoding: string
           script: return context.sha.substring(0, 7)
-      - run: echo 'The Title of your PR is ${{ github.event_name }}'
-      - run: echo 'The Title of your PR is ${{ github.event.head_commit.message }}'
+      - run: echo 'The Title of your PR is ${{ steps.PR.outputs.pr_title }}'
+
       # - run: echo 'The Title of your PR is ${{ github.workflow }}'
 
       # # build
