@@ -29,8 +29,8 @@ jobs:
         with:
           result-encoding: string
           script: return context.sha.substring(0, 7)
-
-      - run: echo The Title of your PR is ${{ github.event }}
+      - run: echo 'The Title of your PR is ${{ github.event.title }}'
+      - run: echo 'The Title of your PR is ${{ github.workflow }}'
 
       # # build
       # - run: flutter pub get
