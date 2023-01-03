@@ -25,8 +25,6 @@ class CamContainer extends StatelessWidget {
           Visibility(
             visible: c?.isCamFileShown.value == true,
             child: Image.file(c?.camFile.value ?? File('')),
-            // child: Image.file(
-            //     File('/data/user/0/app.ifnyas.qshot/cache/image.png')),
           )
         ],
       ),
